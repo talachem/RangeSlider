@@ -73,6 +73,7 @@ public struct RangeSlider: View {
                         height: trackHeight
                     )
                     .offset(x: valueToPixels((range.upperBound + range.lowerBound)/2 - midValue))
+                    .animation(.bouncy, value: range)
                 
                 if let ticks = ticks {
                     ForEach(ticks) { tick in
@@ -214,6 +215,13 @@ public struct RangeSlider: View {
         return copy
     }
     
+    func ticks(_ ticks: [Tick]) -> RangeSlider {
+        var copy = self
+        copy.useTicks = true
+        copy.ticks = ticks
+        return copy
+    }
+    
     // MARK: - Mapping
     
     private func valueToPixels(_ value: Double) -> Double {
@@ -224,9 +232,28 @@ public struct RangeSlider: View {
         (pixels / actualWidth) * valueSpan
     }
     
+//    private func snap(_ value: Double) -> Double {
+//        guard let step = steps else { return value }
+//        return (value / step).rounded() * step
+//    }
+    
     private func snap(_ value: Double) -> Double {
-        guard let step = steps else { return value }
-        return (value / step).rounded() * step
+        var candidates: [Double] = []
+        
+        if let ticks {
+            for tick in ticks where tick.snapTo {
+                candidates.append(tick.place)
+            }
+            candidates.append(bounds.lowerBound)
+            candidates.append(bounds.upperBound)
+        } else if let step = steps {
+            let stepped = (value / step).rounded() * step
+            candidates.append(stepped)
+            candidates.append(bounds.lowerBound)
+            candidates.append(bounds.upperBound)
+        }
+        
+        return candidates.min(by: { abs($0 - value) < abs($1 - value) }) ?? value
     }
 }
 
@@ -237,10 +264,14 @@ public struct RangeSlider: View {
         RangeSlider(
             range: $myRange,
             bounds: 1...60,
-            steps: 5,
+//            steps: 5,
             useTicks: true,
             width: 250
         )
+        .ticks([
+            Tick(place: 25, snapTo: true),
+            Tick(place: 45, snapTo: true),
+        ])
         .tint(.green)
         .padding(32)
     }

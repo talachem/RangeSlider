@@ -12,6 +12,7 @@ public struct Tick: Identifiable {
     public let id = UUID()
     var place: Double
     var style: TickStyle = .default
+    var snapTo: Bool = false
 }
 
 public struct TickStyle {
