@@ -57,3 +57,20 @@ RangeSlider(
     Tick(place: 90) // default style
 ])
 ```
+
+If one wants the sliders to snap to ticks, one can do so:
+
+```swift
+RangeSlider(
+    range: $myRange,
+    bounds: 1...60,
+    useTicks: true,
+    width: 250
+)
+.ticks([
+    Tick(place: 25, snapTo: true),
+    Tick(place: 45, snapTo: true),
+])
+```
+
+The sliders will snap to 1, 25, 45 and 60.
