@@ -196,8 +196,8 @@ public struct RangeSlider: View {
                     .shadow(color: .gray.opacity(!dragging ? 0.25 : 0), radius: 8)
                     .contentShape(Capsule())
                     .frame(width: dragging ? knobWidth * draggingScale : baseWidth, height: dragging ? knobHeight * draggingScale : baseHeight)
-                    .glassEffect(dragging ? .regular.interactive() : .identity, in: .capsule)
-                    .glassEffectID(id, in: namespace)
+                    .glassEffect(.regular.interactive(), in: .capsule)
+//                    .glassEffectID(id, in: namespace)
                     .animation(.bouncy, value: dragging)
                     .animation(.bouncy, value: knobWidth)
             } else {
