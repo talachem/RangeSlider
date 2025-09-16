@@ -193,11 +193,10 @@ public struct RangeSlider: View {
             if #available(macOS 26.0, iOS 26.0, *) {
                 Capsule()
                     .fill(dragging ? .clear : .white)
-                    .shadow(color: .gray.opacity(!dragging ? 0.25 : 0), radius: 8)
                     .contentShape(Capsule())
                     .frame(width: dragging ? knobWidth * draggingScale : baseWidth, height: dragging ? knobHeight * draggingScale : baseHeight)
+                    .shadow(color: .gray.opacity(dragging ? 0 : 0.25), radius: 8)
                     .glassEffect(.regular.interactive(), in: .capsule)
-//                    .glassEffectID(id, in: namespace)
                     .animation(.bouncy, value: dragging)
                     .animation(.bouncy, value: knobWidth)
             } else {
@@ -231,11 +230,6 @@ public struct RangeSlider: View {
     private func pixelsToValue(_ pixels: Double) -> Double {
         (pixels / actualWidth) * valueSpan
     }
-    
-//    private func snap(_ value: Double) -> Double {
-//        guard let step = steps else { return value }
-//        return (value / step).rounded() * step
-//    }
     
     private func snap(_ value: Double) -> Double {
         var candidates: [Double] = []
